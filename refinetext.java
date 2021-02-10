@@ -27,33 +27,67 @@ public class refinetext {
         this.prefixList.add("tri");
     }
 
-    private boolean hasSuffix(String word)
+    private int hasSuffix(String word)
     {
+        
         int suffixListSize = this.suffixList.size();
+        
+        for (int i=0;i<suffixListSize;i++)
+        {
+            if(word.equals(suffixList.get(i)))
+            {
+                return 2;
+            }
+        }//word가 suffix와 같다면 2 return
+
         for (int i=0;i<suffixListSize;i++)
         {
             int suffixSize = this.suffixList.get(i).length();
             int wordSize   = word.length();
             if(this.suffixList.get(i).equals(word.substring(wordSize-suffixSize,wordSize)))//마지막에 붙은게 같다면
             {
-                return true;
-            }
+                return 1;
+            } //suffix 가 포함된 것이라면 return 1.
         }
-        return false;
+        return -1; // 아니면 -1
     }
 
-    private String hyphenMethod(int compoundNameLength)
+    private String hyphenMethod()
     {
-        int index;
-        String copiedName = this.compoundName;
+        String[] compoundWord = this.compoundName.split("-");
+        int index = compoundWord.length;
+        for (int j = 0 ; j < index ;j++)
+        {
+            int hasSuffixResult=this.hasSuffix(compoundWord[j]);
+            if(hasSuffixResult == 1)//suffix 와 같지 않으면서 suffix가 포함된 word 발견 
+            {
+                //여기에 모체사슬 있다.
+                return compoundWord[j];
+            }
+            else if(hasSuffixResult == 2) //suffix 와 정확히 같은 word 발견. 숫자가 포함되어있는 형태이다.
+            {
+                //고로 2개 전에 모체사슬이 있다. 숫자 word가 있으므로.
+
+                return compoundWord[j-2];
+            }
+            else{
+                continue;
+            }
+        }
+        //끝까지 suffix가 나오지 않았다.
+        return "error";
+
+        /*
         while ((index = copiedName.lastIndexOf("-"))!= -1)
         {
+
+
             //그러니까, 지금 확인한 하이픈 전의 word가 suffix가 있다면, 넘어간다.
             if(this.hasSuffix(copiedName.substring(index+1,copiedName.length())) == true)
             {   
                 continue;
             }
-            else if()// 숫자로 구성되어있어도 넘어간다.
+            else if(copiedName.)// 숫자로 구성되어있어도 넘어간다.
             {
 
             }
@@ -61,10 +95,15 @@ public class refinetext {
             {
                 //이 경우, 모체사슬이 포함된 word를 제출한다.
             }
+
+            copiedName=copiedName.substring(0, index-1);
+
         }
+        */
         //그냥 나왔다면, 제일 앞의 word가 모체사슬이다. 제일 앞의 word를 제출한다.
 
     }
+    
     
 
 
@@ -75,7 +114,9 @@ public class refinetext {
         this.importSuffix();
         this.importPrefix();
 
+        String motherWord = this.hyphenMethod();
 
-        int compoundNameLength = this.compoundName.length()
+
+        
     }
 }
