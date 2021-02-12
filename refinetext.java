@@ -188,6 +188,7 @@ public class refinetext {
 
         motherWord = this.hyphenMethod();
         motherNum=this.findMotherNum(motherWord);
+        System.out.println(motherNum);
 
         
     }
