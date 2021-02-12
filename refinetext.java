@@ -49,7 +49,9 @@ public class refinetext {
 
     private String findSuffix(String word) {
         int suffixListSize = this.suffixList.size();
+
         for (int i = 0; i < suffixListSize; i++) {
+
             if (word.equals(suffixList.get(i))) {
                 return word;
             }
@@ -58,7 +60,16 @@ public class refinetext {
         for (int i = 0; i < suffixListSize; i++) {
             int suffixSize = this.suffixList.get(i).length();
             int wordSize = word.length();
-            if (this.suffixList.get(i).equals(word.substring(wordSize - suffixSize, wordSize)))// 마지막에 붙은게 같다면
+            /*
+            System.out.println("-------------------");
+            System.out.println(wordSize);
+            System.out.println("-------------------");
+            */
+            if(suffixSize>wordSize)
+            {
+                continue;
+            }
+            else if (this.suffixList.get(i).equals(word.substring(wordSize - suffixSize, wordSize-1)))// 마지막에 붙은게 같다면
             {
                 return this.suffixList.get(i);
             } // suffix 가 포함된 것이라면 return 1.
@@ -99,7 +110,7 @@ public class refinetext {
     private int findMotherNum(String motherWord)
     {
         String mother_without_suffix = this.deleteSuffix(motherWord);
-        
+        //System.out.println(mother_without_suffix);
         for (int i=0; i<this.motherChainList.size();i++)
         {
 
@@ -110,7 +121,12 @@ public class refinetext {
             //이를테면 butan-1-ol 에서 butan 은 4이고, 이는 List 의 Butan 원소에서 걸려서 4를 출력할 것.
 
             String objectString = this.motherChainList.get(i).motherName;
-            if(mother_without_suffix.substring(mother_without_suffix.length()-objectString.length()+1).equals(objectString))
+            //System.out.println(objectString);
+            if(mother_without_suffix.length()<objectString.length())
+            {
+                continue;
+            }
+            else if(mother_without_suffix.substring(mother_without_suffix.length()-objectString.length()).equals(objectString))
             {
                 return this.motherChainList.get(i).number;    
             }
@@ -187,6 +203,8 @@ public class refinetext {
         this.importMotherChain();
 
         motherWord = this.hyphenMethod();
+        
+        //System.out.println(motherWord);
         motherNum=this.findMotherNum(motherWord);
         System.out.println(motherNum);
 
